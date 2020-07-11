@@ -73,10 +73,16 @@ body, .app {
   outline: 0;
 }
 
+.create-contact-details input:focus { 
+  border-bottom: 2px solid #1EA3DC;
+}
+
 .create-contact-details button {
   margin-top: 20px;
-  background: #ccc;
+  background: #94c561;
+  color: #fff;
   padding: 10px;
+  border-radius: 8px;
   text-transform: uppercase;
   font-size: inherit;
   border: none;
@@ -117,7 +123,7 @@ body, .app {
   background-image: url('./icons/add-icon.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 28px;
+  background-size: 60%;
   font-size: 0;
 }
 
@@ -140,6 +146,16 @@ body, .app {
   padding: 0;
   list-style-type: none;
 }
+
+li:nth-child(odd) { 
+  background: #1EA3DC; 
+  color:white; 
+} 
+
+li:nth-child(even) { 
+  background: #7A2980; 
+  color:white; 
+} 
 
 .contact-list-item {
   padding: 20px;
@@ -198,7 +214,6 @@ body, .app {
   vertical-align: middle;
   cursor: pointer;
   outline: none;
-  color: red;
 }
 
 .edit-contact {
@@ -210,4 +225,16 @@ body, .app {
   background-position: center;
   background-size: 28px;
   font-size: 0;
+  background-color: transparent;
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
