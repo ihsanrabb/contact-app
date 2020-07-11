@@ -66,8 +66,8 @@ class ListContacts extends Component {
                                 backgroundImage: `url(${contact.photo})`
                             }}> </div>
                             <div className='contact-details'>
-                                <p>fullname : {contact.firstName} {contact.lastName}</p>
-                                <p>age : {contact.age}</p>
+                                <p>Fullname : {contact.firstName} {contact.lastName}</p>
+                                <p>Age : {contact.age}</p>
                             </div>
 
                             <Link to={`/update/${contact.id}`} className='edit-contact'>Add Contact</Link>
