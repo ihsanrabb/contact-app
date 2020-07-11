@@ -1,14 +1,44 @@
 import React, { Component } from "react"
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-
-
+import fetchContacts from "./store/actions/fetchContacts";
+import {connect} from "react-redux";
+import axios from "axios"
+import Swal from 'sweetalert2'
 
 class ListContacts extends Component {
 
-    static propTypes = {
-        contacts: PropTypes.array.isRequired,
-        onDeleteContact: PropTypes.func.isRequired
+    componentDidMount() {
+        this.props.fetchContacts()
+    }
+
+    removeContact = (contact) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+                axios.delete(`https://simple-contact-crud.herokuapp.com/contact/${contact.id}`)
+                .then((res) => {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                    this.props.fetchContacts()
+                }).catch((err) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.response.data.message
+                    })
+                })
+            }
+          })
     }
 
     render() {
@@ -42,7 +72,7 @@ class ListContacts extends Component {
 
                             <Link to={`/update/${contact.id}`} className='edit-contact'>Add Contact</Link>
 
-                            <button className='contact-remove' onClick={() => this.props.onDeleteContact(contact)}>
+                            <button className='contact-remove' onClick={() => this.removeContact(contact)}>
                                 Remove
                             </button>
                             </li>
@@ -54,4 +84,16 @@ class ListContacts extends Component {
     }
 }
 
-export default ListContacts
+const mapStateToProps = (state) => {
+    return {
+      contacts: state.contacts,
+    }
+  }
+  
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchContacts: ()=> dispatch(fetchContacts),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListContacts);
