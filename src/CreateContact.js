@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Link } from 'react-router-dom'
 import axios from "axios"
+import Swal from 'sweetalert2'
 
 class CreateContact extends Component {
 
@@ -33,7 +34,6 @@ class CreateContact extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.image)
         let data = {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
@@ -43,7 +43,17 @@ class CreateContact extends Component {
         axios.post('https://simple-contact-crud.herokuapp.com/contact', data)
             .then((res) => {
                 console.log(res)
-            }).catch((err) => console.log(err))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Contact Saved',
+                })
+            }).catch((err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.response.data.message
+                })
+            })
     }
 
     render() {
@@ -53,6 +63,7 @@ class CreateContact extends Component {
 
                 <h2>Add Contact</h2>
                 <form onSubmit={this.handleSubmit} className='create-contact-form'>
+
                     <div className='create-contact-details'>
                         <input 
                             type='text' 

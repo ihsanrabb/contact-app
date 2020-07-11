@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Link } from 'react-router-dom'
 import axios from "axios"
+import Swal from 'sweetalert2'
 
 class UpdateContact extends Component {
 
@@ -21,13 +22,12 @@ class UpdateContact extends Component {
     componentDidMount() {
         let userId = this.props.match.params.id
         axios.get(`https://simple-contact-crud.herokuapp.com/contact/${userId}`)
-            .then(({ data: user }) => {
-                // console.log(user.data)
+            .then(({ data: contact }) => {
                 this.setState({
-                    firstName: user.data.firstName,
-                    lastName: user.data.lastName,
-                    age: user.data.age,
-                    photo: user.data.photo
+                    firstName: contact.data.firstName,
+                    lastName: contact.data.lastName,
+                    age: contact.data.age,
+                    photo: contact.data.photo
                 })
             }).catch(err => console.log(err))
     }
@@ -47,11 +47,20 @@ class UpdateContact extends Component {
             age: this.state.age,
             photo: this.state.photo
         }
-        // let url = "https://cors-anywhere.herokuapp.com/https://simple-contact-crud.herokuapp.com/contact"
         axios.put(`https://simple-contact-crud.herokuapp.com/contact/${userId}`, data)
             .then((res) => {
                 console.log(res)
-            }).catch((err) => console.log(err))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Contact Edited',
+                })
+            }).catch((err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.response.data.message
+                })
+            })
     }
 
     render() {
@@ -81,6 +90,12 @@ class UpdateContact extends Component {
                             placeholder='Age' 
                             name='age'
                             value={this.state.age}
+                            onChange={this.handleChange} />
+                        <input 
+                            type='text' 
+                            placeholder='Photo' 
+                            name='photo'
+                            value={this.state.photo}
                             onChange={this.handleChange} />
         
                         <button>Save Contact</button>
